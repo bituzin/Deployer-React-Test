@@ -68,28 +68,55 @@ function App() {
       </div>
       <div style={{ padding: 40, paddingTop: 120 }}>
         {!isWalletConnected ? (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-            <button
-              className="ibb-btn pulse-anim"
-              style={{
-                fontFamily: 'Inter, Arial, sans-serif',
-                fontWeight: 600,
-                fontSize: '1.08em',
-                padding: '0.7em 1.5em',
-                borderRadius: '8px',
-                border: 'none',
-                background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
-                color: '#fff',
-                boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
-                transition: 'box-shadow 0.2s, background 0.2s',
-                outline: 'none',
-                cursor: 'pointer'
-              }}
-              onClick={connectWallet}
-            >
-              Connect Wallet
-            </button>
-          </div>
+          <>
+            <div style={{
+              maxWidth: 540,
+              margin: '40px auto 32px auto',
+              background: 'rgba(255,255,255,0.95)',
+              borderRadius: 12,
+              boxShadow: '0 2px 16px rgba(0,82,255,0.08)',
+              padding: '28px 32px',
+              textAlign: 'center',
+              color: '#174ea6',
+              fontFamily: 'Inter, Arial, sans-serif',
+              fontWeight: 500,
+              fontSize: '1.12em',
+              letterSpacing: '0.01em'
+            }}>
+              <div style={{ fontWeight: 700, fontSize: '1.18em', marginBottom: 10, color: '#174ea6' }}>
+                Deploy Your Contract – Fast & Secure!
+              </div>
+              Welcome to panel for deploying smart contracts on Celo or Base blockchain.<br />
+              Connect wallet, choose a network, and deploy ready-to-use contracts with a single click!<br /><br />
+              <span style={{ color: '#2563eb', fontWeight: 600 }}>Click “Connect Wallet” and start deploying your own contracts in seconds!</span>
+              <br />
+              <span style={{ fontSize: '0.74em', fontStyle: 'italic', color: '#444', marginTop: 28, display: 'block', fontFamily: 'Georgia, Times, Times New Roman, serif' }}>
+                Currently 4 contracts available. More coming soon.
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40vh' }}>
+              <button
+                className="ibb-btn pulse-anim"
+                style={{
+                  fontFamily: 'Inter, Arial, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '1.08em',
+                  padding: '0.7em 1.5em',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
+                  color: '#fff',
+                  boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
+                  transition: 'box-shadow 0.2s, background 0.2s',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+                onClick={connectWallet}
+              >
+                Connect Wallet
+              </button>
+            </div>
+          </>
         ) : (
           <div>
             <div style={{ marginBottom: 20 }}>Połączono: {walletAddress}</div>
