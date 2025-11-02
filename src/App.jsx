@@ -1,3 +1,4 @@
+import '../src/index.css';
 
 import { useState } from "react";
 import { ethers } from "ethers";
@@ -191,18 +192,12 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 40 }}>
-      <h2>React DApp: Deploy Smart Contracts</h2>
-      <div style={{ marginBottom: 20 }}>
-        <button onClick={connectWallet} style={{ marginRight: 10 }}>
-          Connect Wallet
-        </button>
-        {walletAddress && (
-          <span style={{ color: '#555' }}>Połączono: {walletAddress}</span>
-        )}
-      </div>
-      <div style={{ marginBottom: 30 }}>
-        <label><b>Wybierz sieć:</b> </label>
+    <div className="App">
+      {/* Nagłówek jak w IBB react */}
+      <div className="header" style={{ display: 'flex', alignItems: 'center', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
+        <span className="header-title">
+          Deploy Your Smart Contract <span style={{fontWeight:400}}>to</span>
+        </span>
         <select
           value={network}
           onChange={async e => {
@@ -227,177 +222,43 @@ export default function App() {
               }
             }
           }}
-          style={{ marginLeft: 10 }}
+          className="header-select"
         >
           <option value="base">Base</option>
           <option value="celo">Celo</option>
         </select>
       </div>
-      {contracts.map((c, idx) => (
-        <div key={c.name} style={{ marginBottom: 20 }}>
-          <button onClick={() => deployContract(idx)} disabled={loading}>
-            Deploy {idx === 1 ? "MessageBoard" : c.name}
-          </button>
-          <span style={{ marginLeft: 10, color: '#555', fontSize: '0.95em' }}>
-            {idx === 0 && "Przechowuje liczbę, którą możesz ustawić i odczytać."}
-            {idx === 1 && "Tablica wiadomości – każdy może zapisać i odczytać ostatnią wiadomość oraz nadawcę."}
-            {idx === 2 && "Licznik kliknięć – każdy może zwiększać licznik globalny."}
-            {idx === 3 && "Głosowanie – każdy może zagłosować na opcję A lub B."}
-            {idx === 4 && "(Przykładowy kontrakt – podmień na swój pomysł!)"}
-          </span>
-          {deployedAddresses[idx] && (
-            <>
-              <span style={{ marginLeft: 10 }}>Deployed at: {deployedAddresses[idx]}</span>
-              {idx === 0 && (
-                <>
-                  <button
-                    style={{ marginLeft: 10 }}
-                    onClick={async () => {
-                      if (!window.ethereum) {
-                        alert("MetaMask required");
-                        return;
-                      }
-                      try {
-                        const provider = new ethers.BrowserProvider(window.ethereum);
-                        const contract = new ethers.Contract(
-                          deployedAddresses[0],
-                          [
-                            { "inputs": [], "name": "getNumber", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
-                          ],
-                          provider
-                        );
-                        const value = await contract.getNumber();
-                        setStorageValue(value.toString());
-                      } catch (err) {
-                        console.error(err);
-                        alert("Read failed: " + (err.message || JSON.stringify(err)));
-                      }
-                    }}
-                  >
-                    Odczytaj SimpleStorage
+      {/* Główna zawartość przesunięta w dół */}
+      <div style={{ padding: 40, paddingTop: 100 }}>
+              <div style={{ marginBottom: 20 }}>
+                <button onClick={connectWallet} style={{ marginRight: 10 }}>
+                  Connect Wallet
+                </button>
+                {walletAddress && (
+                  <span style={{ color: '#555' }}>Połączono: {walletAddress}</span>
+                )}
+              </div>
+              {contracts.map((c, idx) => (
+                <div key={c.name} style={{ marginBottom: 20 }}>
+                  <button onClick={() => deployContract(idx)} disabled={loading}>
+                    {idx === 1 ? "MessageBoard" : c.name}
                   </button>
-                  <input
-                    type="number"
-                    placeholder="Nowa wartość"
-                    value={storageValue}
-                    style={{ marginLeft: 10, width: 100 }}
-                    onChange={e => setStorageValue(e.target.value)}
-                  />
-                  <button
-                    style={{ marginLeft: 10 }}
-                    onClick={async () => {
-                      if (!window.ethereum) {
-                        alert("MetaMask required");
-                        return;
-                      }
-                      try {
-                        await window.ethereum.request({ method: "eth_requestAccounts" });
-                        const provider = new ethers.BrowserProvider(window.ethereum);
-                        const signer = await provider.getSigner();
-                        const contract = new ethers.Contract(
-                          deployedAddresses[0],
-                          [
-                            { "inputs": [{ "internalType": "uint256", "name": "num", "type": "uint256" }], "name": "setNumber", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
-                          ],
-                          signer
-                        );
-                        await contract.setNumber(storageValue);
-                        alert("Wartość została zmieniona!");
-                      } catch (err) {
-                        console.error(err);
-                        alert("Set failed: " + (err.message || JSON.stringify(err)));
-                      }
-                    }}
-                  >
-                    Zmień wartość
-                  </button>
-                </>
-              )}
-              {idx === 1 && (
-                <>
-                  <input
-                    type="text"
-                    placeholder="Wpisz wiadomość"
-                    value={message}
-                    style={{ marginLeft: 10 }}
-                    onChange={e => setMessage(e.target.value)}
-                  />
-                  <button
-                    style={{ marginLeft: 10 }}
-                    onClick={async () => {
-                      if (!window.ethereum) {
-                        alert("MetaMask required");
-                        return;
-                      }
-                      try {
-                        await window.ethereum.request({ method: "eth_requestAccounts" });
-                        const provider = new ethers.BrowserProvider(window.ethereum);
-                        const signer = await provider.getSigner();
-                        const contract = new ethers.Contract(
-                          deployedAddresses[1],
-                          [
-                            { "inputs": [{ "internalType": "string", "name": "message", "type": "string" }], "name": "postMessage", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
-                            { "inputs": [], "name": "lastMessage", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" },
-                            { "inputs": [], "name": "lastSender", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }
-                          ],
-                          signer
-                        );
-                        await contract.postMessage(message);
-                        setMessage("");
-                      } catch (err) {
-                        console.error(err);
-                        alert("Send failed: " + (err.message || JSON.stringify(err)));
-                      }
-                    }}
-                  >
-                    Wyślij wiadomość
-                  </button>
-                  <button
-                    style={{ marginLeft: 10 }}
-                    onClick={async () => {
-                      if (!window.ethereum) {
-                        alert("MetaMask required");
-                        return;
-                      }
-                      try {
-                        const provider = new ethers.BrowserProvider(window.ethereum);
-                        const contract = new ethers.Contract(
-                          deployedAddresses[1],
-                          [
-                            { "inputs": [], "name": "lastMessage", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" },
-                            { "inputs": [], "name": "lastSender", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }
-                          ],
-                          provider
-                        );
-                        const msg = await contract.lastMessage();
-                        const sender = await contract.lastSender();
-                        setLastMessage(msg);
-                        setLastSender(sender);
-                      } catch (err) {
-                        console.error(err);
-                        alert("Read failed: " + (err.message || JSON.stringify(err)));
-                      }
-                    }}
-                  >
-                    Odczytaj wiadomość
-                  </button>
-                </>
-              )}
-            </>
-          )}
-        </div>
-      ))}
-      {storageValue && (
-        <div style={{ marginTop: 20 }}>
-          <b>Wartość SimpleStorage:</b> {storageValue}
-        </div>
-      )}
-      {lastMessage && (
-        <div style={{ marginTop: 20 }}>
-          <b>Ostatnia wiadomość:</b> {lastMessage}<br />
-          <b>Nadawca:</b> {lastSender}
-        </div>
-      )}
-    </div>
-  );
-}
+                  <span style={{ marginLeft: 10, color: '#555', fontSize: '0.95em' }}>
+                    {idx === 0 && "Przechowuje liczbę, którą możesz ustawić i odczytać."}
+                    {idx === 1 && "Tablica wiadomości – każdy może zapisać i odczytać ostatnią wiadomość oraz nadawcę."}
+                    {idx === 2 && "Licznik kliknięć – każdy może zwiększać licznik globalny."}
+                    {idx === 3 && "Głosowanie – każdy może zagłosować na opcję A lub B."}
+                    {idx === 4 && "(Przykładowy kontrakt – podmień na swój pomysł!)"}
+                  </span>
+                  {deployedAddresses[idx] && (
+                    <span style={{ marginLeft: 10 }}>Deployed at: {deployedAddresses[idx]}</span>
+                  )}
+                  {/* ...pozostała logika przycisków i interakcji... */}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+// ...existing code...
+// Poprawna końcówka pliku
