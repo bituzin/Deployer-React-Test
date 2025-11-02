@@ -37,11 +37,29 @@ function App() {
     <div className="App">
       <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
         <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.35rem', letterSpacing: '0.01em' }}>
-          Deploy your contract <span style={{fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.01em'}}>on</span>
+          Deploy Your Contract <span style={{fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.01em'}}>on</span>
         </span>
         <select
           value={network}
-          onChange={e => setNetwork(e.target.value)}
+          onChange={async e => {
+            const newNetwork = e.target.value;
+            setNetwork(newNetwork);
+            if (window.ethereum && isWalletConnected) {
+              let chainId;
+              if (newNetwork === "base") chainId = "0x2105"; // Base Mainnet
+              if (newNetwork === "celo") chainId = "0xa4ec"; // Celo Mainnet
+              if (chainId) {
+                try {
+                  await window.ethereum.request({
+                    method: "wallet_switchEthereumChain",
+                    params: [{ chainId }]
+                  });
+                } catch (err) {
+                  alert("Nie udało się przełączyć sieci w portfelu: " + err.message);
+                }
+              }
+            }
+          }}
           className="header-select"
         >
           <option value="base">Base</option>
@@ -52,18 +70,22 @@ function App() {
         {!isWalletConnected ? (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
             <button
-              onClick={connectWallet}
+              className="ibb-btn pulse-anim"
               style={{
-                padding: '16px 32px',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
+                fontFamily: 'Inter, Arial, sans-serif',
+                fontWeight: 600,
+                fontSize: '1.08em',
+                padding: '0.7em 1.5em',
                 borderRadius: '8px',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                border: 'none',
+                background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
+                color: '#fff',
+                boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
+                transition: 'box-shadow 0.2s, background 0.2s',
+                outline: 'none',
+                cursor: 'pointer'
               }}
+              onClick={connectWallet}
             >
               Connect Wallet
             </button>
@@ -71,22 +93,51 @@ function App() {
         ) : (
           <div>
             <div style={{ marginBottom: 20 }}>Połączono: {walletAddress}</div>
-            <button onClick={() => { setIsWalletConnected(false); setWalletAddress(""); }}>Disconnect</button>
+            <button
+              className="ibb-btn pulse-anim"
+              style={{
+                fontFamily: 'Inter, Arial, sans-serif',
+                fontWeight: 600,
+                fontSize: '1.08em',
+                padding: '0.7em 1.5em',
+                borderRadius: '8px',
+                border: 'none',
+                background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
+                color: '#fff',
+                boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
+                transition: 'box-shadow 0.2s, background 0.2s',
+                outline: 'none',
+                cursor: 'pointer',
+                marginBottom: '10px'
+              }}
+              onClick={() => { setIsWalletConnected(false); setWalletAddress(""); }}
+            >
+              Disconnect
+            </button>
             <div style={{ marginTop: 30 }}>
               {contracts.map((contract, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
-                  <button style={{
-                    padding: '10px 18px',
-                    fontWeight: 'bold',
-                    background: 'linear-gradient(90deg,#2563eb,#1e40af)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    marginRight: '18px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                    minWidth: '140px',
-                    cursor: 'pointer'
-                  }}>{contract.name}</button>
+                  <button
+                    className="ibb-btn pulse-anim"
+                    style={{
+                      marginRight: '18px',
+                      minWidth: '140px',
+                      fontFamily: 'Inter, Arial, sans-serif',
+                      fontWeight: 600,
+                      fontSize: '1.08em',
+                      padding: '0.7em 1.5em',
+                      borderRadius: '8px',
+                      border: 'none',
+                      background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
+                      color: '#fff',
+                      boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
+                      transition: 'box-shadow 0.2s, background 0.2s',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {contract.name}
+                  </button>
                   <span style={{ color: '#444', fontSize: '1rem' }}>{contract.description}</span>
                 </div>
               ))}

@@ -1,3 +1,21 @@
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0,82,255,0.08);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 18px 4px #174ea6;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(0,82,255,0.08);
+  }
+}
+
+.pulse-anim:hover, .pulse-anim:focus {
+  animation: pulse 0.4s;
+}
 /* Styl przycisków jak w IBB react */
 .ibb-btn {
   background: linear-gradient(90deg, var(--base-blue), var(--base-blue-light));
