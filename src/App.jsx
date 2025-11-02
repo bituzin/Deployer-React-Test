@@ -1,6 +1,7 @@
 import '../src/index.css';
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { ethers } from "ethers";
 // Importy JSON z kompilacji kontraktów (do podmiany na prawdziwe pliki po kompilacji)
 // import contractOneJson from "../artifacts/ContractOne.json";
@@ -195,8 +196,8 @@ export default function App() {
     <div className="App">
       {/* Nagłówek jak w IBB react */}
       <div className="header" style={{ display: 'flex', alignItems: 'center', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
-        <span className="header-title">
-          Deploy Your Smart Contract <span style={{fontWeight:400}}>to</span>
+        <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.35rem', letterSpacing: '0.01em' }}>
+          Deploy your contract <span style={{fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.35rem', color: '#fff', letterSpacing: '0.01em'}}>on</span>
         </span>
         <select
           value={network}
@@ -231,18 +232,51 @@ export default function App() {
       {/* Główna zawartość przesunięta w dół */}
       <div style={{ padding: 40, paddingTop: 100 }}>
               <div style={{ marginBottom: 20 }}>
-                <button onClick={connectWallet} style={{ marginRight: 10 }}>
+                <motion.button
+                  className="ibb-btn"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.7 }}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={connectWallet}
+                  style={{ marginRight: 10 }}
+                  disabled={!!walletAddress}
+                >
                   Connect Wallet
-                </button>
+                </motion.button>
                 {walletAddress && (
-                  <span style={{ color: '#555' }}>Połączono: {walletAddress}</span>
+                  <>
+                    <span style={{ color: '#555' }}>Połączono: {walletAddress}</span>
+                    <motion.button
+                      className="ibb-btn"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.7 }}
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.96 }}
+                      style={{ marginLeft: 10 }}
+                      onClick={() => setWalletAddress("")}
+                    >
+                      Disconnect
+                    </motion.button>
+                  </>
                 )}
               </div>
               {contracts.map((c, idx) => (
                 <div key={c.name} style={{ marginBottom: 20 }}>
-                  <button onClick={() => deployContract(idx)} disabled={loading}>
+                  <motion.button
+                    className="ibb-btn"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.7 }}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => deployContract(idx)}
+                    disabled={loading}
+                  >
                     {idx === 1 ? "MessageBoard" : c.name}
-                  </button>
+                  </motion.button>
                   <span style={{ marginLeft: 10, color: '#555', fontSize: '0.95em' }}>
                     {idx === 0 && "Przechowuje liczbę, którą możesz ustawić i odczytać."}
                     {idx === 1 && "Tablica wiadomości – każdy może zapisać i odczytać ostatnią wiadomość oraz nadawcę."}

@@ -1,3 +1,25 @@
+/* Styl przycisków jak w IBB react */
+.ibb-btn {
+  background: linear-gradient(90deg, var(--base-blue), var(--base-blue-light));
+  color: #fff;
+  font-family: Inter, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.08em;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 1.5em;
+  box-shadow: 0 2px 8px rgba(0,82,255,0.08);
+  transition: box-shadow 0.2s, background 0.2s;
+  outline: none;
+}
+.ibb-btn:hover, .ibb-btn:focus {
+  background: linear-gradient(90deg, var(--base-blue-dark), var(--base-blue));
+  box-shadow: 0 0 24px #0052FF;
+}
+.ibb-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 :root {
   --base-blue: #0052FF;
   --base-blue-light: #3D7FFF;
