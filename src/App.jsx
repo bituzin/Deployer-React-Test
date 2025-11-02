@@ -170,31 +170,67 @@ export default function App() {
             <>
               <span style={{ marginLeft: 10 }}>Deployed at: {deployedAddresses[idx]}</span>
               {idx === 0 && (
-                <button
-                  style={{ marginLeft: 10 }}
-                  onClick={async () => {
-                    if (!window.ethereum) {
-                      alert("MetaMask required");
-                      return;
-                    }
-                    try {
-                      const provider = new ethers.BrowserProvider(window.ethereum);
-                      const contract = new ethers.Contract(
-                        deployedAddresses[0],
-                        [
-                          { "inputs": [], "name": "getNumber", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
-                        ],
-                        provider
-                      );
-                      const value = await contract.getNumber();
-                      setStorageValue(value.toString());
-                    } catch (err) {
-                      alert("Read failed: " + err.message);
-                    }
-                  }}
-                >
-                  Odczytaj SimpleStorage
-                </button>
+                <>
+                  <button
+                    style={{ marginLeft: 10 }}
+                    onClick={async () => {
+                      if (!window.ethereum) {
+                        alert("MetaMask required");
+                        return;
+                      }
+                      try {
+                        const provider = new ethers.BrowserProvider(window.ethereum);
+                        const contract = new ethers.Contract(
+                          deployedAddresses[0],
+                          [
+                            { "inputs": [], "name": "getNumber", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
+                          ],
+                          provider
+                        );
+                        const value = await contract.getNumber();
+                        setStorageValue(value.toString());
+                      } catch (err) {
+                        alert("Read failed: " + err.message);
+                      }
+                    }}
+                  >
+                    Odczytaj SimpleStorage
+                  </button>
+                  <input
+                    type="number"
+                    placeholder="Nowa wartość"
+                    value={storageValue}
+                    style={{ marginLeft: 10, width: 100 }}
+                    onChange={e => setStorageValue(e.target.value)}
+                  />
+                  <button
+                    style={{ marginLeft: 10 }}
+                    onClick={async () => {
+                      if (!window.ethereum) {
+                        alert("MetaMask required");
+                        return;
+                      }
+                      try {
+                        await window.ethereum.request({ method: "eth_requestAccounts" });
+                        const provider = new ethers.BrowserProvider(window.ethereum);
+                        const signer = await provider.getSigner();
+                        const contract = new ethers.Contract(
+                          deployedAddresses[0],
+                          [
+                            { "inputs": [{ "internalType": "uint256", "name": "num", "type": "uint256" }], "name": "setNumber", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+                          ],
+                          signer
+                        );
+                        await contract.setNumber(storageValue);
+                        alert("Wartość została zmieniona!");
+                      } catch (err) {
+                        alert("Set failed: " + err.message);
+                      }
+                    }}
+                  >
+                    Zmień wartość
+                  </button>
+                </>
               )}
               {idx === 1 && (
                 <>
