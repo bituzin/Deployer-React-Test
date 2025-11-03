@@ -96,7 +96,7 @@ function App() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '40vh' }}>
               <button
-                className="ibb-btn pulse-anim"
+                className="ibb-btn"
                 style={{
                   fontFamily: 'Inter, Arial, sans-serif',
                   fontWeight: 600,
@@ -121,7 +121,7 @@ function App() {
           <div>
             <div style={{ marginBottom: 20 }}>Połączono: {walletAddress}</div>
             <button
-              className="ibb-btn pulse-anim"
+              className="ibb-btn"
               style={{
                 fontFamily: 'Inter, Arial, sans-serif',
                 fontWeight: 600,
@@ -145,7 +145,7 @@ function App() {
               {contracts.map((contract, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
                   <button
-                    className="ibb-btn pulse-anim"
+                    className="ibb-btn"
                     style={{
                       marginRight: '18px',
                       minWidth: '140px',
