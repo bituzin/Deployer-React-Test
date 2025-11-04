@@ -9,29 +9,32 @@ const contracts = [
 ];
 
 function App() {
+  // Stan widoku: 'main' (okno powitalne) lub 'deploy' (lista kontraktów)
+  const [view, setView] = useState('main');
   // headerWords usunięte, bo nie jest już używane
   const [showHeader, setShowHeader] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [showWelcome, setShowWelcome] = useState(false);
-  const [showButton, setShowButton] = useState(false);
+  // const [showButton, setShowButton] = useState(false); // usunięto, bo nieużywane
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setShowHeader(true), 1500);
+    const timer = setTimeout(() => setShowHeader(true), 500); // header: 0.5s
     return () => clearTimeout(timer);
   }, []);
 
+  const [showNav, setShowNav] = useState(false);
   React.useEffect(() => {
     if (showHeader) {
-      const timerWelcome = setTimeout(() => setShowWelcome(true), 2500);
-      const timerButton = setTimeout(() => setShowButton(true), 5500);
+      const timerNav = setTimeout(() => setShowNav(true), 500); // pasek: 0.5s po headerze
+      const timerWelcome = setTimeout(() => setShowWelcome(true), 1000); // okno: 0.5s po pasku
       return () => {
+        clearTimeout(timerNav);
         clearTimeout(timerWelcome);
-        clearTimeout(timerButton);
       };
     } else {
+      setShowNav(false);
       setShowWelcome(false);
-      setShowButton(false);
     }
   }, [showHeader]);
 
@@ -58,61 +61,127 @@ function App() {
 
   return (
     <div className="App">
-  <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000, background: '#2563eb' }}>
-        <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.8em', letterSpacing: '0.01em', opacity: showHeader ? 1 : 0, transition: 'opacity 5s' }}>
-          Deploy Your Contract on
+  <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000, background: 'linear-gradient(90deg, #0052FF 0%, #3D7FFF 100%)' }}>
+  <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.8em', letterSpacing: '0.01em', opacity: showHeader ? 1 : 0, transition: 'opacity 1s' }}>
+    Contract Deployer
         </span>
-        <select
-          style={{ fontSize: '1em', padding: '6px 16px', borderRadius: 8, border: '1px solid #bbb', outline: 'none', fontWeight: 500, opacity: showHeader ? 1 : 0, transition: 'opacity 5s' }}
-          onChange={async (e) => {
-            const chain = e.target.value;
-            let chainParams = null;
-            if (chain === 'celo') {
-              chainParams = {
-                chainId: '0xa4ec', // 42220
-                chainName: 'Celo Mainnet',
-                nativeCurrency: { name: 'CELO', symbol: 'CELO', decimals: 18 },
-                rpcUrls: ['https://forno.celo.org'],
-                blockExplorerUrls: ['https://explorer.celo.org']
-              };
-            } else if (chain === 'base') {
-              chainParams = {
-                chainId: '0x2105', // 8451
-                chainName: 'Base Mainnet',
-                nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-                rpcUrls: ['https://mainnet.base.org'],
-                blockExplorerUrls: ['https://basescan.org']
-              };
-            } else if (chain === 'optimism') {
-              chainParams = {
-                chainId: '0xa', // 10
-                chainName: 'Optimism',
-                nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-                rpcUrls: ['https://mainnet.optimism.io'],
-                blockExplorerUrls: ['https://optimistic.etherscan.io']
-              };
-            }
-            if (window.ethereum && chainParams) {
-              try {
-                await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [chainParams] });
-              } catch (err) {
-                // user rejected or already on chain
-              }
-            }
+      </div>
+
+      <div style={{
+        width: '100%',
+        position: 'fixed',
+        top: 68,
+        left: 0,
+        zIndex: 999,
+        background: '#f5f7fa',
+        borderBottom: '1px solid #e3eaf5',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '18px',
+        padding: '5px 28px',
+        fontFamily: 'Inter, Arial, sans-serif',
+        fontWeight: 500,
+        fontSize: '0.98em',
+        color: '#2563eb',
+        boxShadow: '0 2px 8px rgba(0,82,255,0.04)',
+        opacity: showNav ? 1 : 0,
+        transform: showNav ? 'translateY(0)' : 'translateY(30px)',
+  transition: 'opacity 1s, transform 1s',
+        pointerEvents: showNav ? 'auto' : 'none',
+      }}>
+  <a href="#" style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px' }}
+    onClick={e => { e.preventDefault(); setView('main'); }}
+    onMouseOver={e => e.currentTarget.style.background='#e3eaf5'}
+    onMouseOut={e => e.currentTarget.style.background='transparent'}
+  >Home</a>
+  <span style={{ borderLeft: '2px solid #2563eb', height: 28, margin: '0 18px', display: 'inline-block', verticalAlign: 'middle' }}></span>
+  <a href="#" style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px' }}
+    onClick={e => { e.preventDefault(); setView('deploy'); }}
+    onMouseOver={e => e.currentTarget.style.background='#e3eaf5'}
+    onMouseOut={e => e.currentTarget.style.background='transparent'}
+  >Deploy</a>
+  <span style={{ borderLeft: '2px solid #2563eb', height: 28, margin: '0 18px', display: 'inline-block', verticalAlign: 'middle' }}></span>
+        <div style={{ position: 'relative', display: 'inline-block' }}
+          onMouseEnter={e => {
+            const menu = e.currentTarget.querySelector('.contracts-dropdown');
+            if (menu) menu.style.display = 'block';
+          }}
+          onMouseLeave={e => {
+            const menu = e.currentTarget.querySelector('.contracts-dropdown');
+            if (menu) menu.style.display = 'none';
           }}
         >
-          <option value="celo">Celo</option>
-          <option value="base">Base</option>
-          <option value="optimism">Optimism</option>
-        </select>
+          <a href="/contracts" style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px' }} onMouseOver={e => e.currentTarget.style.background='#e3eaf5'} onMouseOut={e => e.currentTarget.style.background='transparent'}>Contracts</a>
+  <span style={{ borderLeft: '2px solid #2563eb', height: 28, margin: '0 18px', display: 'inline-block', verticalAlign: 'middle' }}></span>
+          <div className="contracts-dropdown" style={{
+            display: 'none',
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            background: '#fff',
+            minWidth: '180px',
+            boxShadow: '0 4px 16px rgba(0,82,255,0.10)',
+            borderRadius: '8px',
+            zIndex: 1001,
+            padding: '8px 0',
+            fontSize: '1em',
+            fontFamily: 'Inter, Arial, sans-serif',
+            fontWeight: 500
+          }}>
+            {contracts.map((contract) => (
+              <a
+                key={contract.name}
+                href={`#contract-${contract.name}`}
+                style={{
+                  display: 'block',
+                  padding: '8px 20px',
+                  color: '#2563eb',
+                  textDecoration: 'none',
+                  borderRadius: 0,
+                  transition: 'background 0.2s',
+                  cursor: 'pointer'
+                }}
+                onMouseOver={e => e.currentTarget.style.background='#e3eaf5'}
+                onMouseOut={e => e.currentTarget.style.background='transparent'}
+              >
+                {contract.name}
+              </a>
+            ))}
+          </div>
+        </div>
+  <a href="/how" style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px' }} onMouseOver={e => e.currentTarget.style.background='#e3eaf5'} onMouseOut={e => e.currentTarget.style.background='transparent'}>How It Works</a>
       </div>
       <div style={{ padding: 40, paddingTop: 120 }}>
-        {!isWalletConnected ? (
+        {view === 'deploy' ? (
+          <div style={{ marginTop: 30 }}>
+            {contracts.map((contract) => (
+              <div key={contract.name} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
+                <button
+                  className="ibb-btn"
+                  style={{ marginRight: '18px', minWidth: '140px' }}
+                >
+                  {contract.name}
+                </button>
+                <span style={{ color: '#444', fontSize: '1rem' }}>{contract.description}</span>
+              </div>
+            ))}
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 36 }}>
+              <button
+                className="ibb-btn"
+                style={{ minWidth: '180px', fontSize: '1.08em' }}
+                onClick={connectWallet}
+              >
+                Connect Wallet
+              </button>
+            </div>
+          </div>
+        ) : !isWalletConnected ? (
           <>
+            {/* Okno powitalne z fade-in tylko na Home */}
             <div
               style={{
                 maxWidth: 540,
-                margin: '0px auto 32px auto',
+                margin: '60px auto 32px auto',
                 background: 'rgba(255,255,255,0.95)',
                 borderRadius: 12,
                 boxShadow: '0 2px 16px rgba(0,82,255,0.08)',
@@ -122,34 +191,24 @@ function App() {
                 fontWeight: 500,
                 fontSize: '1.12em',
                 letterSpacing: '0.01em',
-                opacity: showWelcome ? 1 : 0,
-                transform: showWelcome ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'opacity 5s, transform 5s'
+                opacity: view === 'main' && showWelcome ? 1 : 0,
+                transform: view === 'main' && showWelcome ? 'translateY(0)' : 'translateY(30px)',
+                transition: 'opacity 1s, transform 1s'
               }}
             >
               <span style={{ color: '#2563eb', fontWeight: 700 }}>
                 <span style={{ fontSize: '1.08em', fontWeight: 700, display: 'block', marginBottom: '32px' }}>
                   Deploy Your Contract – Fast & Secure!
                 </span>
-                Welcome to panel for deploying smart contracts on Celo or Base blockchain.<br />
-                Connect wallet, choose a network, and deploy ready-to-use contracts with a single click!<br /><br />
-                Click “Connect Wallet” and start deploying your own contracts in seconds!
+                Welcome to panel for deploying smart contracts on Celo, Base and Optimism blockchain.<br />
+                <br />
+                Click "Deploy", connect wallet, choose a network, and deploy ready-to-use contracts with a single click!<br />
+                <br />
+                Deploy your own contracts in seconds!
               </span>
               <span style={{ fontSize: '0.74em', fontStyle: 'italic', color: '#888', marginTop: 28, display: 'block', fontFamily: 'Georgia, Times, Times New Roman, serif' }}>
                 Currently 4 contracts available. More coming soon.
               </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '50px', marginBottom: '18px' }}>
-              <button
-                className="ibb-btn"
-                style={{
-                  opacity: showButton ? 1 : 0,
-                  transition: 'opacity 5s'
-                }}
-                onClick={connectWallet}
-              >
-                Connect Wallet
-              </button>
             </div>
           </>
         ) : (
@@ -163,8 +222,8 @@ function App() {
               Disconnect
             </button>
             <div style={{ marginTop: 30 }}>
-              {contracts.map((contract, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
+              {contracts.map((contract) => (
+                <div key={contract.name} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
                   <button
                     className="ibb-btn"
                     style={{ marginRight: '18px', minWidth: '140px' }}
