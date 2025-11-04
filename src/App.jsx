@@ -220,6 +220,7 @@ function App() {
                       >
                         Connect
                       </button>
+                      
                     </>
                   ) : (
                     contracts.map((contract) => (
