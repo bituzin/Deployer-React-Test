@@ -107,7 +107,20 @@ html, body {
 }
 .ibb-btn:hover, .ibb-btn:focus {
   background: linear-gradient(90deg, var(--base-blue-dark), var(--base-blue));
-  box-shadow: 0 0 24px #0052FF;
+  box-shadow: 0 6px 24px 0 rgba(0,82,255,0.18), 0 0 16px 4px #3D7FFF;
+  transform: translateY(-4px);
+  transition: box-shadow 0.3s, background 0.2s, transform 0.3s;
+}
+.ibb-btn:active {
+  transform: scale(0.96) translateY(1px);
+  box-shadow: 0 1px 4px rgba(0,82,255,0.10);
+  transition: transform 0.08s, box-shadow 0.08s;
+  outline: none;
+  border: none;
+}
+.ibb-btn:focus, .ibb-btn:focus-visible {
+  outline: none;
+  border: none;
 }
 .ibb-btn:disabled {
   opacity: 0.6;
@@ -128,6 +141,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg);
 }
 
 h1 {

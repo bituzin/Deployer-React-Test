@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 const contracts = [
@@ -8,22 +9,22 @@ const contracts = [
 ];
 
 function App() {
-  const headerWords = ["Deploy", "Your", "Contract"];
+  // headerWords usunięte, bo nie jest już używane
   const [showHeader, setShowHeader] = useState(false);
-  React.useEffect(() => {
-    const timer = setTimeout(() => setShowHeader(true), 1500);
-    return () => clearTimeout(timer);
-  }, []);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [showWelcome, setShowWelcome] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
-  // Pokaz okno powitalne po animacji tytulu
+  React.useEffect(() => {
+    const timer = setTimeout(() => setShowHeader(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   React.useEffect(() => {
     if (showHeader) {
-  const timerWelcome = setTimeout(() => setShowWelcome(true), 2500);
-  const timerButton = setTimeout(() => setShowButton(true), 5500);
+      const timerWelcome = setTimeout(() => setShowWelcome(true), 2500);
+      const timerButton = setTimeout(() => setShowButton(true), 5500);
       return () => {
         clearTimeout(timerWelcome);
         clearTimeout(timerButton);
@@ -57,21 +58,53 @@ function App() {
 
   return (
     <div className="App">
-      <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 }}>
-        <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.8em', letterSpacing: '0.01em' }}>
-          {headerWords.map((word) => (
-            <span
-              key={word}
-              style={{
-                opacity: showHeader ? 1 : 0,
-                transition: 'opacity 5s',
-                marginRight: '0.4em'
-              }}
-            >
-              {word}
-            </span>
-          ))}
+  <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000, background: '#2563eb' }}>
+        <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.8em', letterSpacing: '0.01em', opacity: showHeader ? 1 : 0, transition: 'opacity 5s' }}>
+          Deploy Your Contract on
         </span>
+        <select
+          style={{ fontSize: '1em', padding: '6px 16px', borderRadius: 8, border: '1px solid #bbb', outline: 'none', fontWeight: 500, opacity: showHeader ? 1 : 0, transition: 'opacity 5s' }}
+          onChange={async (e) => {
+            const chain = e.target.value;
+            let chainParams = null;
+            if (chain === 'celo') {
+              chainParams = {
+                chainId: '0xa4ec', // 42220
+                chainName: 'Celo Mainnet',
+                nativeCurrency: { name: 'CELO', symbol: 'CELO', decimals: 18 },
+                rpcUrls: ['https://forno.celo.org'],
+                blockExplorerUrls: ['https://explorer.celo.org']
+              };
+            } else if (chain === 'base') {
+              chainParams = {
+                chainId: '0x2105', // 8451
+                chainName: 'Base Mainnet',
+                nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+                rpcUrls: ['https://mainnet.base.org'],
+                blockExplorerUrls: ['https://basescan.org']
+              };
+            } else if (chain === 'optimism') {
+              chainParams = {
+                chainId: '0xa', // 10
+                chainName: 'Optimism',
+                nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+                rpcUrls: ['https://mainnet.optimism.io'],
+                blockExplorerUrls: ['https://optimistic.etherscan.io']
+              };
+            }
+            if (window.ethereum && chainParams) {
+              try {
+                await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [chainParams] });
+              } catch (err) {
+                // user rejected or already on chain
+              }
+            }
+          }}
+        >
+          <option value="celo">Celo</option>
+          <option value="base">Base</option>
+          <option value="optimism">Optimism</option>
+        </select>
       </div>
       <div style={{ padding: 40, paddingTop: 120 }}>
         {!isWalletConnected ? (
@@ -91,7 +124,7 @@ function App() {
                 letterSpacing: '0.01em',
                 opacity: showWelcome ? 1 : 0,
                 transform: showWelcome ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'opacity 5s, transform 5s'
+                transition: 'opacity 5s, transform 5s'
               }}
             >
               <span style={{ color: '#2563eb', fontWeight: 700 }}>
@@ -110,20 +143,8 @@ function App() {
               <button
                 className="ibb-btn"
                 style={{
-                  fontFamily: 'Inter, Arial, sans-serif',
-                  fontWeight: 600,
-                  fontSize: '1.08em',
-                  padding: '0.7em 1.5em',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
-                  color: '#fff',
-                  boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
-                  transition: 'box-shadow 0.2s, background 0.2s, opacity 5s, transform 5s',
-                  outline: 'none',
-                  cursor: 'pointer',
                   opacity: showButton ? 1 : 0,
-                  transform: showButton ? 'translateY(0)' : 'translateY(30px)'
+                  transition: 'opacity 5s'
                 }}
                 onClick={connectWallet}
               >
@@ -136,21 +157,7 @@ function App() {
             <div style={{ marginBottom: 20 }}>Połączono: {walletAddress}</div>
             <button
               className="ibb-btn"
-              style={{
-                fontFamily: 'Inter, Arial, sans-serif',
-                fontWeight: 600,
-                fontSize: '1.08em',
-                padding: '0.7em 1.5em',
-                borderRadius: '8px',
-                border: 'none',
-                background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
-                color: '#fff',
-                boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
-                transition: 'box-shadow 0.2s, background 0.2s',
-                outline: 'none',
-                cursor: 'pointer',
-                marginBottom: '10px'
-              }}
+              style={{ marginBottom: '10px' }}
               onClick={() => { setIsWalletConnected(false); setWalletAddress(""); }}
             >
               Disconnect
@@ -160,22 +167,7 @@ function App() {
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
                   <button
                     className="ibb-btn"
-                    style={{
-                      marginRight: '18px',
-                      minWidth: '140px',
-                      fontFamily: 'Inter, Arial, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '1.08em',
-                      padding: '0.7em 1.5em',
-                      borderRadius: '8px',
-                      border: 'none',
-                      background: 'linear-gradient(90deg, var(--base-blue), var(--base-blue-light))',
-                      color: '#fff',
-                      boxShadow: '0 2px 8px rgba(0,82,255,0.08)',
-                      transition: 'box-shadow 0.2s, background 0.2s',
-                      outline: 'none',
-                      cursor: 'pointer'
-                    }}
+                    style={{ marginRight: '18px', minWidth: '140px' }}
                   >
                     {contract.name}
                   </button>
