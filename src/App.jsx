@@ -1,6 +1,8 @@
 
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { ethers } from "ethers";
+import { deploySimpleStorageBase } from "./deploySimpleStorageBase";
 
 const contracts = [
   { name: "SimpleStorage", description: "Przechowuje liczbę, którą możesz ustawić i odczytać." },
@@ -203,6 +205,46 @@ function App() {
                         <button
                           className="ibb-btn"
                           style={{ marginRight: '18px', minWidth: '100px', fontSize: '0.98em', padding: '0.5em 1.1em' }}
+                          onClick={async () => {
+                            if (contract.name === "SimpleStorage") {
+                              if (!window.ethereum) {
+                                alert("Potrzebny MetaMask lub inny portfel");
+                                return;
+                              }
+                              try {
+                                const provider = new ethers.BrowserProvider(window.ethereum);
+                                const signer = await provider.getSigner();
+                                // Deploy na Base przez UniversalFactory
+                                // Podaj adres UniversalFactory na Base:
+                                const UNIVERSAL_FACTORY_ADDRESS = "0xTwójAdresUniversalFactory";
+                                const UNIVERSAL_FACTORY_ABI = [
+                                  "function deploySimpleStorage() external returns (address)",
+                                  "event ContractDeployed(address indexed deployer, address indexed contractAddress, string contractName)"
+                                ];
+                                const factory = new ethers.Contract(UNIVERSAL_FACTORY_ADDRESS, UNIVERSAL_FACTORY_ABI, signer);
+                                const tx = await factory.deploySimpleStorage();
+                                const receipt = await tx.wait();
+                                const event = receipt.logs
+                                  .map(log => {
+                                    try {
+                                      return factory.interface.parseLog(log);
+                                    } catch {
+                                      return null;
+                                    }
+                                  })
+                                  .find(e => e && e.name === "ContractDeployed");
+                                if (event) {
+                                  alert(`Kontrakt SimpleStorage wdrożony na Base!\nAdres: ${event.args.contractAddress}`);
+                                } else {
+                                  alert("Nie udało się pobrać adresu wdrożonego kontraktu.");
+                                }
+                              } catch (err) {
+                                alert("Błąd deployowania: " + err.message);
+                              }
+                            } else {
+                              alert(`Deploy dla ${contract.name} nie jest jeszcze zaimplementowany.`);
+                            }
+                          }}
                         >
                           {contract.name}
                         </button>
