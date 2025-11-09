@@ -215,8 +215,8 @@ function App() {
                                 const provider = new ethers.BrowserProvider(window.ethereum);
                                 const signer = await provider.getSigner();
                                 // Deploy na Base przez UniversalFactory
-                                // Podaj adres UniversalFactory na Base:
-                                const UNIVERSAL_FACTORY_ADDRESS = "0xTwójAdresUniversalFactory";
+                                // Adres UniversalFactory na Base:
+                                const UNIVERSAL_FACTORY_ADDRESS = "0x70699201a8e4452590b0d32f919d28cc6796a688";
                                 const UNIVERSAL_FACTORY_ABI = [
                                   "function deploySimpleStorage() external returns (address)",
                                   "event ContractDeployed(address indexed deployer, address indexed contractAddress, string contractName)"
