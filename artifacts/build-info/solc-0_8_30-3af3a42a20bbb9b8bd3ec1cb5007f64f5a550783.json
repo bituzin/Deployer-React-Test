@@ -1,0 +1,51 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_30-3af3a42a20bbb9b8bd3ec1cb5007f64f5a550783",
+  "solcVersion": "0.8.30",
+  "solcLongVersion": "0.8.30+commit.73712a01",
+  "userSourceNameMap": {
+    "contracts/ClickCounter.sol": "project/contracts/ClickCounter.sol",
+    "contracts/MessageBoard.sol": "project/contracts/MessageBoard.sol",
+    "contracts/SimpleStorage.sol": "project/contracts/SimpleStorage.sol",
+    "contracts/SimpleVoting.sol": "project/contracts/SimpleVoting.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "prague",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/ClickCounter.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract ClickCounter {\r\n    uint256 public count;\r\n\r\n    function click() public {\r\n        count += 1;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/MessageBoard.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract MessageBoard {\r\n    string public lastMessage;\r\n    address public lastSender;\r\n\r\n    function postMessage(string memory message) public {\r\n        lastMessage = message;\r\n        lastSender = msg.sender;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/SimpleStorage.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract SimpleStorage {\r\n    uint256 public storedNumber;\r\n\r\n    function setNumber(uint256 num) public {\r\n        storedNumber = num;\r\n    }\r\n\r\n    function getNumber() public view returns (uint256) {\r\n        return storedNumber;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/SimpleVoting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract SimpleVoting {\r\n    uint256 public votesOptionA;\r\n    uint256 public votesOptionB;\r\n\r\n    function voteA() public {\r\n        votesOptionA += 1;\r\n    }\r\n\r\n    function voteB() public {\r\n        votesOptionB += 1;\r\n    }\r\n}\r\n"
+      }
+    }
+  }
+}

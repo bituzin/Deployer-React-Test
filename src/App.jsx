@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { ethers } from "ethers";
@@ -160,7 +159,7 @@ function App() {
                 if (menu) menu.style.display = 'none';
               }}
             >
-              <span style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px', cursor: 'pointer' }}>Contracts</span>
+              <span style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 4px 0 -8px', cursor: 'pointer' }}>Contracts</span>
               <span style={{ borderLeft: '2px solid #2563eb', height: 28, margin: '0 18px', display: 'inline-block', verticalAlign: 'middle' }}></span>
               <div className="contracts-dropdown" style={{
                 display: 'none',
@@ -177,7 +176,8 @@ function App() {
                 fontFamily: 'Inter, Arial, sans-serif',
                 fontWeight: 500
               }}>
-                {contracts.map((contract) => (
+                <Link to="/contract/simple-storage" style={{ display: 'block', padding: '8px 20px', color: '#2563eb', textDecoration: 'none', borderRadius: 0, transition: 'background 0.2s', cursor: 'pointer' }}>SimpleStorage</Link>
+                {contracts.filter(c => c.name !== 'SimpleStorage').map((contract) => (
                   <span
                     key={contract.name}
                     style={{
@@ -317,6 +317,59 @@ function App() {
                       </div>
                     ))
                   )}
+                </div>
+              } />
+              <Route path="/contract/simple-storage" element={
+                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                          <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleStorage</h2>
+                          <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                            Bardzo prosty smart kontrakt, który pozwala na przechowywanie jednej liczby całkowitej. Każdy może ustawić nową wartość oraz ją odczytać. Idealny do nauki i testów działania blockchaina.
+                          </div>
+                          <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
+                              <span style={{ color: '#444', fontSize: '0.86em', fontWeight: 600, letterSpacing: '0.04em' }}>solidity</span>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    const code = `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract SimpleStorage {\n    uint256 private value;\n\n    function set(uint256 newValue) public {\n        value = newValue;\n    }\n\n    function get() public view returns (uint256) {\n        return value;\n    }\n}`;
+                                    navigator.clipboard.writeText(code);
+                                  }}
+                                  style={{
+                                    background: '#e6e8eb',
+                                    color: '#444',
+                                    border: 'none',
+                                    fontWeight: 500,
+                                    fontSize: '0.86em',
+                                    cursor: 'pointer',
+                                    marginRight: '10px',
+                                    padding: '2px 10px',
+                                    borderRadius: '4px',
+                                    transition: 'background 0.2s'
+                                  }}
+                                  onMouseOver={e => e.currentTarget.style.background='#d1d3d6'}
+                                  onMouseOut={e => e.currentTarget.style.background='#e6e8eb'}
+                                >
+                                  Copy
+                                </button>
+                              </div>
+                            </div>
+                            <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '220px' }}>
+        {`// SPDX-License-Identifier: MIT
+        pragma solidity ^0.8.0;
+
+        contract SimpleStorage {
+            uint256 private value;
+
+            function set(uint256 newValue) public {
+                value = newValue;
+            }
+
+            function get() public view returns (uint256) {
+                return value;
+            }
+        }`}
+                            </pre>
+                          </div>
                 </div>
               } />
             </Routes>
