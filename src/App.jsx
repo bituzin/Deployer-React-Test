@@ -6,8 +6,8 @@ import { deploySimpleStorageBase } from "./deploySimpleStorageBase";
 
 const contracts = [
   { name: "SimpleStorage", description: "Przechowuje liczbę, którą możesz ustawić i odczytać." },
-  { name: "MessageBoard", description: "Tablica wiadomości – każdy może zapisać i odczytać ostatnią wiadomość oraz nadawcę." },
   { name: "ClickCounter", description: "Licznik kliknięć – każdy może zwiększać licznik globalny." },
+  { name: "MessageBoard", description: "Tablica wiadomości – każdy może zapisać i odczytać ostatnią wiadomość oraz nadawcę." },
   { name: "SimpleVoting", description: "Głosowanie – każdy może zagłosować na opcję A lub B." }
 ];
 
@@ -18,6 +18,8 @@ function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [showWelcome, setShowWelcome] = useState(false);
+  // Popup modal state
+  const [popup, setPopup] = useState({ visible: false, message: "", txHash: null });
   // const [showButton, setShowButton] = useState(false); // usunięto, bo nieużywane
 
   React.useEffect(() => {
@@ -42,7 +44,7 @@ function App() {
 
   async function connectWallet() {
     if (!window.ethereum) {
-      alert("MetaMask required");
+      setPopup({ visible: true, message: "MetaMask required", txHash: null });
       return;
     }
     try {
@@ -55,15 +57,68 @@ function App() {
         setWalletAddress("");
       }
     } catch (error) {
-      alert("Failed to connect wallet: " + error.message);
+      setPopup({ visible: true, message: "Failed to connect wallet: " + error.message, txHash: null });
       setIsWalletConnected(false);
       setWalletAddress("");
     }
   }
 
   return (
-  <Router basename="/">
+    <Router basename="/">
       <div className="App">
+        {/* Popup Modal */}
+        {popup.visible && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.18)',
+            zIndex: 2000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <div style={{
+              background: '#fff',
+              borderRadius: 14,
+              boxShadow: '0 2px 16px rgba(0,82,255,0.12)',
+              padding: '32px 38px',
+              minWidth: 320,
+              maxWidth: 420,
+              textAlign: 'center',
+              fontFamily: 'Inter, Arial, sans-serif',
+              fontWeight: 500,
+              fontSize: '1.08em',
+              color: '#2563eb',
+              position: 'relative',
+            }}>
+              <div style={{ marginBottom: popup.txHash ? 18 : 28 }}>
+                {popup.message}
+              </div>
+              {popup.txHash && (
+                <div style={{ marginBottom: 18 }}>
+                  <a
+                    href={`https://basescan.org/tx/${popup.txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#0052FF', textDecoration: 'underline', fontSize: '0.98em' }}
+                  >
+                    View transaction on explorer
+                  </a>
+                </div>
+              )}
+              <button
+                className="ibb-btn"
+                style={{ minWidth: '120px', fontSize: '0.98em', padding: '0.5em 1.1em', marginTop: '8px' }}
+                onClick={() => setPopup({ visible: false, message: "", txHash: null })}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        )}
         <div className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '28px', padding: '18px 40px', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000, background: 'linear-gradient(90deg, #0052FF 0%, #3D7FFF 100%)' }}>
           <span className="header-title" style={{ color: '#fff', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 700, fontSize: '1.8em', letterSpacing: '0.01em', opacity: showHeader ? 1 : 0, transition: 'opacity 1s' }}>
             Contract Deployer
@@ -187,7 +242,7 @@ function App() {
                 </>
               } />
               <Route path="/deploy" element={
-                <div style={{ marginTop: 60, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft: 0 }}>
                   {!isWalletConnected ? (
                     <>
                       <div style={{ fontWeight: 600, fontSize: '1.08em', marginBottom: 18, color: '#2563eb', textAlign: 'center' }}>
@@ -207,10 +262,17 @@ function App() {
                       <div key={contract.name} style={{ display: 'flex', alignItems: 'center', marginBottom: 18 }}>
                         <button
                           className="ibb-btn"
-                          style={{ marginRight: '18px', minWidth: '100px', fontSize: '0.98em', padding: '0.5em 1.1em' }}
+                          style={{
+                            marginRight: '18px',
+                            minWidth: '170px', // szerokość na podstawie najdłuższego napisu
+                            fontSize: '0.98em',
+                            padding: '0.5em 1.1em',
+                            textAlign: 'center',
+                            display: 'inline-block'
+                          }}
                           onClick={async () => {
                             if (!window.ethereum) {
-                              alert("Potrzebny MetaMask lub inny portfel");
+                              setPopup({ visible: true, message: "MetaMask or other wallet required", txHash: null });
                               return;
                             }
                             try {
@@ -227,18 +289,26 @@ function App() {
                                 bytecode = "0x6080604052348015600e575f5ffd5b5060f38061001b5f395ff3fe6080604052348015600e575f5ffd5b50600436106044575f3560e01c80633c8d0bec14604857806355416e06146061578063847d52d6146069578063fb32aedb146071575b5f5ffd5b604f5f5481565b60405190815260200160405180910390f35b60676077565b005b604f60015481565b6067608d565b60015f5f828254608691906099565b9091555050565b6001805f828254608691905b8082018082111560b757634e487b7160e01b5f52601160045260245ffd5b9291505056fea2646970667358221220ae61db634cc85056e4ea442c0e23a1916017a0a5ab25893566b0efbb30f3860b64736f6c634300081e0033";
                               }
                               if (!bytecode) {
-                                alert(`Brak bytecode dla kontraktu ${contract.name}`);
+                                setPopup({ visible: true, message: `No bytecode for contract ${contract.name}`, txHash: null });
                                 return;
                               }
                               const tx = await signer.sendTransaction({ data: bytecode });
                               const receipt = await tx.wait();
                               if (receipt.contractAddress) {
-                                alert(`Kontrakt ${contract.name} utworzony!\nAdres: ${receipt.contractAddress}`);
+                                setPopup({
+                                  visible: true,
+                                  message: `Contract ${contract.name} deployed successfully!`,
+                                  txHash: tx.hash
+                                });
                               } else {
-                                alert("Nie udało się pobrać adresu utworzonego kontraktu.");
+                                setPopup({ visible: true, message: "Could not get deployed contract address.", txHash: null });
                               }
                             } catch (err) {
-                              alert("Błąd deployowania: " + err.message);
+                              if (err && err.message && (err.message.includes('user rejected') || err.message.includes('denied'))) {
+                                setPopup({ visible: true, message: "Transaction aborted by user", txHash: null });
+                              } else {
+                                setPopup({ visible: true, message: "Deploy error: " + err.message, txHash: null });
+                              }
                             }
                           }}
                         >
