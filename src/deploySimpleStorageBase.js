@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import SimpleStorageArtifact from "../../hardhat/artifacts/contracts/SimpleStorage.sol/SimpleStorage.json";
+import SimpleStorageArtifact from "./artifacts/SimpleStorage.json";
 
 export async function deploySimpleStorageBase(signer) {
   // Adres kontraktu SimpleFactory na Base (przykładowy, podmień na swój jeśli masz)
