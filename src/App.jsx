@@ -307,7 +307,7 @@ function App() {
               <Route path="/contract/simple-storage" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                           <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleStorage</h2>
-                          <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                          <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                             Bardzo prosty smart kontrakt, który pozwala na przechowywanie jednej liczby całkowitej. Każdy może ustawić nową wartość oraz ją odczytać. Idealny do nauki i testów działania blockchaina.
                           </div>
                           <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
@@ -338,7 +338,7 @@ function App() {
                                 </button>
                               </div>
                             </div>
-                            <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '220px' }}>
+                            <pre style={{ background: '#d3d8e8', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '220px' }}>
         {`// SPDX-License-Identifier: MIT
         pragma solidity ^0.8.0;
 
@@ -360,7 +360,7 @@ function App() {
               <Route path="/contract/click-counter" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>ClickCounter</h2>
-                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                     Bardzo prosty smart kontrakt, który zlicza liczbę kliknięć. Każdy może wywołać funkcję <code>click()</code>, aby zwiększyć licznik o jeden. Aktualną wartość licznika można odczytać przez <code>getCount()</code>. Kontrakt nie posiada uprawnień – każdy może kliknąć i odczytać licznik.
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
@@ -391,7 +391,7 @@ function App() {
                         </button>
                       </div>
                     </div>
-                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+                    <pre style={{ background: '#d3d8e8', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
 {`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -413,8 +413,8 @@ contract ClickCounter {
               <Route path="/contract/message-board" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>MessageBoard</h2>
-                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
-                    Smart kontrakt, który pozwala na zapisanie wiadomości wraz z adresem nadawcy. Każdy może odczytać ostatnią wiadomość oraz jej nadawcę. Przydatne do nauki o przechowywaniu danych na blockchainie.
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                    MessageBoard to prosty smart kontrakt, który działa jak publiczna tablica wiadomości. Każdy użytkownik może zapisać nową wiadomość wraz ze swoim adresem, a każdy może odczytać ostatnią zapisaną wiadomość i jej nadawcę.
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
@@ -444,7 +444,7 @@ contract ClickCounter {
                         </button>
                       </div>
                     </div>
-                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+                    <pre style={{ background: '#d3d8e8', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
 {`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -468,7 +468,7 @@ contract MessageBoard {
               <Route path="/contract/simple-voting" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleVoting</h2>
-                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                     SimpleVoting to prosty kontrakt do głosowania. Każdy użytkownik może oddać głos na jedną z dwóch opcji (A lub B). Kontrakt zlicza głosy i pozwala odczytać aktualny wynik. Każdy może zagłosować tylko raz. Idealny do nauki mechanizmów głosowania na blockchainie.
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
@@ -499,7 +499,7 @@ contract MessageBoard {
                         </button>
                       </div>
                     </div>
-                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+                    <pre style={{ background: '#d3d8e8', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
 {`// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
