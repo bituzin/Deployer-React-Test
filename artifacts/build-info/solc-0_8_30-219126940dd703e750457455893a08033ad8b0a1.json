@@ -1,0 +1,55 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_30-219126940dd703e750457455893a08033ad8b0a1",
+  "solcVersion": "0.8.30",
+  "solcLongVersion": "0.8.30+commit.73712a01",
+  "userSourceNameMap": {
+    "contracts/ClickCounter.sol": "project/contracts/ClickCounter.sol",
+    "contracts/MessageBoard.sol": "project/contracts/MessageBoard.sol",
+    "contracts/SimpleStorage.sol": "project/contracts/SimpleStorage.sol",
+    "contracts/SimpleVoting.sol": "project/contracts/SimpleVoting.sol",
+    "contracts/Voting.sol": "project/contracts/Voting.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "prague",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/ClickCounter.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract ClickCounter {\r\n    uint256 public count;\r\n\r\n    function click() public {\r\n        count += 1;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/MessageBoard.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract MessageBoard {\r\n    string public lastMessage;\r\n    address public lastSender;\r\n\r\n    function postMessage(string memory message) public {\r\n        lastMessage = message;\r\n        lastSender = msg.sender;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/SimpleStorage.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract SimpleStorage {\r\n    uint256 public storedNumber;\r\n\r\n    function setNumber(uint256 num) public {\r\n        storedNumber = num;\r\n    }\r\n\r\n    function getNumber() public view returns (uint256) {\r\n        return storedNumber;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/SimpleVoting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.30;\r\n\r\ncontract SimpleVoting {\r\n    uint256 public votesOptionA;\r\n    uint256 public votesOptionB;\r\n\r\n    function voteA() public {\r\n        votesOptionA += 1;\r\n    }\r\n\r\n    function voteB() public {\r\n        votesOptionB += 1;\r\n    }\r\n}\r\n"
+      },
+      "project/contracts/Voting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.19;\r\n\r\n// Lokalna definicja interfejsu IERC20 (bez importu)\r\ninterface IERC20 {\r\n    function totalSupply() external view returns (uint256);\r\n    function balanceOf(address account) external view returns (uint256);\r\n    function transfer(address recipient, uint256 amount) external returns (bool);\r\n    function allowance(address owner, address spender) external view returns (uint256);\r\n    function approve(address spender, uint256 amount) external returns (bool);\r\n    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);\r\n}\r\n\r\n/// @notice Kontrakt do głosowania zoptymalizowany pod gaz.\r\ncontract Voting {\r\n    error NoVotingPower();\r\n    error VotingClosed();\r\n    error AlreadyVoted();\r\n    error VotingNotEnded();\r\n    error NotToken();\r\n\r\n    IERC20 public immutable token;\r\n    uint256 public immutable votingDeadline;\r\n\r\n    mapping(address => uint8) public voteState;\r\n    struct VoteCounters { uint128 forVotes; uint128 againstVotes; }\r\n    VoteCounters private _counters;\r\n\r\n    event VoteCasted(address indexed voter, bool vote, uint256 weight);\r\n    event VotesRemoved(address indexed voter, uint256 weight);\r\n\r\n    constructor(address _tokenAddress, uint256 _votingPeriod) {\r\n        token = IERC20(_tokenAddress);\r\n        votingDeadline = block.timestamp + _votingPeriod;\r\n    }\r\n\r\n    function votesFor() public view returns (uint256 v) {\r\n        assembly {\r\n            v := and(sload(_counters.slot), 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)\r\n        }\r\n    }\r\n    function votesAgainst() public view returns (uint256 v) {\r\n        assembly {\r\n            v := shr(128, sload(_counters.slot))\r\n        }\r\n    }\r\n\r\n    function vote(bool _vote) external {\r\n        uint256 balance_;\r\n        address t = address(token);\r\n        address sender_ = msg.sender;\r\n        assembly {\r\n            let ptr := mload(0x40)\r\n            mstore(ptr, 0x70a0823100000000000000000000000000000000000000000000000000000000)\r\n            mstore(add(ptr, 4), sender_)\r\n            if iszero(staticcall(gas(), t, ptr, 0x24, 0, 0x20)) { revert(0, 0) }\r\n            balance_ := mload(0)\r\n        }\r\n        if (balance_ == 0) revert NoVotingPower();\r\n        if (block.timestamp >= votingDeadline) revert VotingClosed();\r\n        uint8 state;\r\n        assembly {\r\n            let ptr := mload(0x40)\r\n            mstore(ptr, sender_)\r\n            mstore(add(ptr, 32), voteState.slot)\r\n            state := and(sload(keccak256(ptr, 64)), 0xFF)\r\n        }\r\n        if (state != 0) revert AlreadyVoted();\r\n        assembly {\r\n            let slot := _counters.slot\r\n            let packed := sload(slot)\r\n            switch _vote\r\n            case 1 {\r\n                packed := add(packed, balance_)\r\n                let ptr := mload(0x40)\r\n                mstore(ptr, sender_)\r\n                mstore(add(ptr, 32), voteState.slot)\r\n                sstore(keccak256(ptr, 64), 2)\r\n            }\r\n            default {\r\n                packed := add(packed, shl(128, balance_))\r\n                let ptr := mload(0x40)\r\n                mstore(ptr, sender_)\r\n                mstore(add(ptr, 32), voteState.slot)\r\n                sstore(keccak256(ptr, 64), 1)\r\n            }\r\n            sstore(slot, packed)\r\n        }\r\n        emit VoteCasted(sender_, _vote, balance_);\r\n    }\r\n\r\n    function removeVotes(address voter) external {\r\n        if (msg.sender != address(token)) revert NotToken();\r\n        uint256 balance_;\r\n        uint8 state;\r\n        address t = address(token);\r\n        assembly {\r\n            let ptr := mload(0x40)\r\n            mstore(ptr, voter)\r\n            mstore(add(ptr, 32), voteState.slot)\r\n            let mapSlot := keccak256(ptr, 64)\r\n            state := and(sload(mapSlot), 0xFF)\r\n            if iszero(state) {\r\n            }\r\n            if state {\r\n                mstore(ptr, 0x70a0823100000000000000000000000000000000000000000000000000000000)\r\n                mstore(add(ptr, 4), voter)\r\n                if iszero(staticcall(gas(), t, ptr, 0x24, 0, 0x20)) { revert(0, 0) }\r\n                balance_ := mload(0)\r\n                let slot := _counters.slot\r\n                let packed := sload(slot)\r\n                switch state\r\n                case 2 {\r\n                    packed := sub(packed, balance_)\r\n                }\r\n                default {\r\n                    packed := sub(packed, shl(128, balance_))\r\n                }\r\n                sstore(slot, packed)\r\n                sstore(mapSlot, 0)\r\n            }\r\n        }\r\n        if (state == 0) return;\r\n        emit VotesRemoved(voter, balance_);\r\n    }\r\n\r\n    function getResult() external view returns (bool) {\r\n        if (block.timestamp < votingDeadline) revert VotingNotEnded();\r\n        return _counters.forVotes > _counters.againstVotes;\r\n    }\r\n}\r\n"
+      }
+    }
+  }
+}
