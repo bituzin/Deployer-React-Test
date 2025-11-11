@@ -177,24 +177,9 @@ function App() {
                 fontWeight: 500
               }}>
                 <Link to="/contract/simple-storage" style={{ display: 'block', padding: '8px 20px', color: '#2563eb', textDecoration: 'none', borderRadius: 0, transition: 'background 0.2s', cursor: 'pointer' }}>SimpleStorage</Link>
-                {contracts.filter(c => c.name !== 'SimpleStorage').map((contract) => (
-                  <span
-                    key={contract.name}
-                    style={{
-                      display: 'block',
-                      padding: '8px 20px',
-                      color: '#2563eb',
-                      textDecoration: 'none',
-                      borderRadius: 0,
-                      transition: 'background 0.2s',
-                      cursor: 'pointer'
-                    }}
-                    onMouseOver={e => e.currentTarget.style.background='#e3eaf5'}
-                    onMouseOut={e => e.currentTarget.style.background='transparent'}
-                  >
-                    {contract.name}
-                  </span>
-                ))}
+                <Link to="/contract/click-counter" style={{ display: 'block', padding: '8px 20px', color: '#2563eb', textDecoration: 'none', borderRadius: 0, transition: 'background 0.2s', cursor: 'pointer' }}>ClickCounter</Link>
+                <Link to="/contract/message-board" style={{ display: 'block', padding: '8px 20px', color: '#2563eb', textDecoration: 'none', borderRadius: 0, transition: 'background 0.2s', cursor: 'pointer' }}>MessageBoard</Link>
+                <Link to="/contract/simple-voting" style={{ display: 'block', padding: '8px 20px', color: '#2563eb', textDecoration: 'none', borderRadius: 0, transition: 'background 0.2s', cursor: 'pointer' }}>SimpleVoting</Link>
               </div>
             </div>
             <Link to="/how" style={{ textDecoration: 'none', color: '#2563eb', padding: '4px 20px', borderRadius: 6, transition: 'background 0.2s', margin: '0 14px' }}>How It Works</Link>
@@ -370,6 +355,181 @@ function App() {
         }`}
                             </pre>
                           </div>
+                </div>
+              } />
+              <Route path="/contract/click-counter" element={
+                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>ClickCounter</h2>
+                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                    Bardzo prosty smart kontrakt, który zlicza liczbę kliknięć. Każdy może wywołać funkcję <code>click()</code>, aby zwiększyć licznik o jeden. Aktualną wartość licznika można odczytać przez <code>getCount()</code>. Kontrakt nie posiada uprawnień – każdy może kliknąć i odczytać licznik.
+                  </div>
+                  <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
+                      <span style={{ color: '#444', fontSize: '0.86em', fontWeight: 600, letterSpacing: '0.04em' }}>solidity</span>
+                      <div>
+                        <button
+                          onClick={() => {
+                            const code = `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract ClickCounter {\n    uint256 public count;\n\n    function click() public {\n        count += 1;\n    }\n\n    function getCount() public view returns (uint256) {\n        return count;\n    }\n}`;
+                            navigator.clipboard.writeText(code);
+                          }}
+                          style={{
+                            background: '#e6e8eb',
+                            color: '#444',
+                            border: 'none',
+                            fontWeight: 500,
+                            fontSize: '0.86em',
+                            cursor: 'pointer',
+                            marginRight: '10px',
+                            padding: '2px 10px',
+                            borderRadius: '4px',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseOver={e => e.currentTarget.style.background='#d1d3d6'}
+                          onMouseOut={e => e.currentTarget.style.background='#e6e8eb'}
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+{`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ClickCounter {
+    uint256 public count;
+
+    function click() public {
+        count += 1;
+    }
+
+    function getCount() public view returns (uint256) {
+        return count;
+    }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              } />
+              <Route path="/contract/message-board" element={
+                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>MessageBoard</h2>
+                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                    Smart kontrakt, który pozwala na zapisanie wiadomości wraz z adresem nadawcy. Każdy może odczytać ostatnią wiadomość oraz jej nadawcę. Przydatne do nauki o przechowywaniu danych na blockchainie.
+                  </div>
+                  <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
+                      <span style={{ color: '#444', fontSize: '0.86em', fontWeight: 600, letterSpacing: '0.04em' }}>solidity</span>
+                      <div>
+                        <button
+                          onClick={() => {
+                            const code = `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract MessageBoard {\n    string private lastMessage;\n    address private lastSender;\n\n    function sendMessage(string calldata message) public {\n        lastMessage = message;\n        lastSender = msg.sender;\n    }\n\n    function getLastMessage() public view returns (string memory, address) {\n        return (lastMessage, lastSender);\n    }\n}`;
+                            navigator.clipboard.writeText(code);
+                          }}
+                          style={{
+                            background: '#e6e8eb',
+                            color: '#444',
+                            border: 'none',
+                            fontWeight: 500,
+                            fontSize: '0.86em',
+                            cursor: 'pointer',
+                            marginRight: '10px',
+                            padding: '2px 10px',
+                            borderRadius: '4px',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseOver={e => e.currentTarget.style.background='#d1d3d6'}
+                          onMouseOut={e => e.currentTarget.style.background='#e6e8eb'}
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+{`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract MessageBoard {
+    string private lastMessage;
+    address private lastSender;
+
+    function sendMessage(string calldata message) public {
+        lastMessage = message;
+        lastSender = msg.sender;
+    }
+
+    function getLastMessage() public view returns (string memory, address) {
+        return (lastMessage, lastSender);
+    }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              } />
+              <Route path="/contract/simple-voting" element={
+                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleVoting</h2>
+                  <div style={{ color: '#444', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
+                    SimpleVoting to prosty kontrakt do głosowania. Każdy użytkownik może oddać głos na jedną z dwóch opcji (A lub B). Kontrakt zlicza głosy i pozwala odczytać aktualny wynik. Każdy może zagłosować tylko raz. Idealny do nauki mechanizmów głosowania na blockchainie.
+                  </div>
+                  <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
+                      <span style={{ color: '#444', fontSize: '0.86em', fontWeight: 600, letterSpacing: '0.04em' }}>solidity</span>
+                      <div>
+                        <button
+                          onClick={() => {
+                            const code = `// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\ncontract SimpleVoting {\n    enum VoteOption { A, B }\n    struct Voter {\n        bool hasVoted;\n        VoteOption vote;\n    }\n    mapping(address => Voter) public voters;\n    uint256 public voteACount;\n    uint256 public voteBCount;\n\n    function vote(VoteOption _vote) public {\n        require(!voters[msg.sender].hasVoted, "You have already voted.");\n        voters[msg.sender].hasVoted = true;\n        voters[msg.sender].vote = _vote;\n        if (_vote == VoteOption.A) {\n            voteACount++;\n        } else {\n            voteBCount++;\n        }\n    }\n\n    function getResult() public view returns (uint256, uint256) {\n        return (voteACount, voteBCount);\n    }\n}`;
+                            navigator.clipboard.writeText(code);
+                          }}
+                          style={{
+                            background: '#e6e8eb',
+                            color: '#444',
+                            border: 'none',
+                            fontWeight: 500,
+                            fontSize: '0.86em',
+                            cursor: 'pointer',
+                            marginRight: '10px',
+                            padding: '2px 10px',
+                            borderRadius: '4px',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseOver={e => e.currentTarget.style.background='#d1d3d6'}
+                          onMouseOut={e => e.currentTarget.style.background='#e6e8eb'}
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    <pre style={{ background: 'none', color: '#222', fontSize: '1em', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', padding: '20px 18px', margin: 0, borderBottomLeftRadius: '10px', borderBottomRightRadius: '10px', overflowX: 'auto', minHeight: '180px' }}>
+{`// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleVoting {
+    enum VoteOption { A, B }
+    struct Voter {
+        bool hasVoted;
+        VoteOption vote;
+    }
+    mapping(address => Voter) public voters;
+    uint256 public voteACount;
+    uint256 public voteBCount;
+
+    function vote(VoteOption _vote) public {
+        require(!voters[msg.sender].hasVoted, "You have already voted.");
+        voters[msg.sender].hasVoted = true;
+        voters[msg.sender].vote = _vote;
+        if (_vote == VoteOption.A) {
+            voteACount++;
+        } else {
+            voteBCount++;
+        }
+    }
+
+    function getResult() public view returns (uint256, uint256) {
+        return (voteACount, voteBCount);
+    }
+}`}
+                    </pre>
+                  </div>
                 </div>
               } />
             </Routes>
