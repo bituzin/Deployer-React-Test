@@ -313,7 +313,7 @@ function App() {
                 </div>
               } />
               <Route path="/contract/simple-storage" element={
-                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                <div style={{ maxWidth: 843, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                             <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>SimpleStorage</h2>
                             <button
@@ -360,9 +360,14 @@ function App() {
                               }}
                             >Deploy</button>
                           </div>
-                          <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
-                            Bardzo prosty smart kontrakt, który pozwala na przechowywanie jednej liczby całkowitej. Każdy może ustawić nową wartość oraz ją odczytać. Idealny do nauki i testów działania blockchaina.
-                          </div>
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px', maxWidth: '843px' }}>
+                    <b>SimpleStorage is a minimal contract for storing a single integer value on the blockchain. It is perfect for learning, testing, and demonstrating how persistent storage works in smart contracts. Anyone can update the value, and anyone can read it at any time. There are no restrictions or access controls, making it ideal for public demos and tutorials.</b>
+                    <div style={{ marginTop: 18, marginBottom: 0, fontWeight: 700, color: '#6b7280', fontSize: '1.04em' }}>Function:</div>
+                    <ul style={{ marginTop: 16, marginBottom: 0, paddingLeft: 18 }}>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>set(uint256 newValue)</span>&nbsp;&ndash;&nbsp;allows anyone to set a new integer value. the previous value is overwritten. useful for storing simple data or as a base for more complex contracts.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>get()</span>&nbsp;&ndash;&nbsp;returns the current stored value. anyone can call this to read the latest number saved in the contract.<div style={{ height: '32px' }}></div></li>
+                    </ul>
+                  </div>
                           <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
                               <span style={{ color: '#444', fontSize: '0.86em', fontWeight: 600, letterSpacing: '0.04em' }}>solidity</span>
@@ -411,7 +416,7 @@ function App() {
                 </div>
               } />
               <Route path="/contract/click-counter" element={
-                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                <div style={{ maxWidth: 843, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                     <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>ClickCounter</h2>
                     <button
@@ -454,8 +459,13 @@ function App() {
                       }}
                     >Deploy</button>
                   </div>
-                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
-                    Bardzo prosty smart kontrakt, który zlicza liczbę kliknięć. Każdy może wywołać funkcję <code>click()</code>, aby zwiększyć licznik o jeden. Aktualną wartość licznika można odczytać przez <code>getCount()</code>. Kontrakt nie posiada uprawnień – każdy może kliknąć i odczytać licznik.
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px', maxWidth: '843px' }}>
+                    <b>ClickCounter is a public contract that tracks the total number of times users have interacted with it. Every call to increment increases the global counter, making it a great example for event tracking, gamification, or simple analytics on-chain. The contract is open to everyone, so the count reflects all user activity.</b>
+                    <div style={{ marginTop: 18, marginBottom: 0, fontWeight: 700, color: '#6b7280', fontSize: '1.04em' }}>Function:</div>
+                    <ul style={{ marginTop: 16, marginBottom: 0, paddingLeft: 18 }}>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>increment()</span>&nbsp;&ndash;&nbsp;increases the counter by one. anyone can call this function, and each call is recorded in the total count.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>getCount()</span>&nbsp;&ndash;&nbsp;returns the current value of the counter. this lets anyone see how many times the contract has been used.<div style={{ height: '32px' }}></div></li>
+                    </ul>
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
@@ -505,7 +515,7 @@ contract ClickCounter {
                 </div>
               } />
               <Route path="/contract/message-board" element={
-                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                <div style={{ maxWidth: 843, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                     <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>MessageBoard</h2>
                     <button
@@ -548,8 +558,14 @@ contract ClickCounter {
                       }}
                     >Deploy</button>
                   </div>
-                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
-                    MessageBoard to prosty smart kontrakt, który działa jak publiczna tablica wiadomości. Każdy użytkownik może zapisać nową wiadomość wraz ze swoim adresem, a każdy może odczytać ostatnią zapisaną wiadomość i jej nadawcę.
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px', maxWidth: '843px' }}>
+                    <b>MessageBoard is a simple public contract for posting and reading messages. Each new message overwrites the previous one and records the sender's address. This contract is useful for public announcements, feedback, or as a basic communication tool on-chain. All users share the same board, so only the latest message is visible.</b>
+                    <div style={{ marginTop: 18, marginBottom: 0, fontWeight: 700, color: '#6b7280', fontSize: '1.04em' }}>Function:</div>
+                    <ul style={{ marginTop: 16, marginBottom: 0, paddingLeft: 18 }}>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>setMessage(string message)</span>&nbsp;&ndash;&nbsp;saves a new message and the sender's address. the previous message is replaced. great for simple chat or notifications.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>getMessage()</span>&nbsp;&ndash;&nbsp;returns the latest message posted to the board.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>getSender()</span>&nbsp;&ndash;&nbsp;returns the address of the user who posted the last message.<div style={{ height: '32px' }}></div></li>
+                    </ul>
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
@@ -601,7 +617,7 @@ contract MessageBoard {
                 </div>
               } />
               <Route path="/contract/simple-voting" element={
-                <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
+                <div style={{ maxWidth: 843, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
                     <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>SimpleVoting</h2>
                     <button
@@ -644,8 +660,15 @@ contract MessageBoard {
                       }}
                     >Deploy</button>
                   </div>
-                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
-                    SimpleVoting to prosty kontrakt do głosowania. Każdy użytkownik może oddać głos na jedną z dwóch opcji (A lub B). Kontrakt zlicza głosy i pozwala odczytać aktualny wynik. Każdy może zagłosować tylko raz. Idealny do nauki mechanizmów głosowania na blockchainie.
+                  <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px', maxWidth: '843px' }}>
+                    <b>SimpleVoting is a basic contract for on-chain polls. Users can vote for option A or B, and the contract keeps track of the total votes for each. This contract is ideal for learning about voting mechanisms, consensus, and transparent decision-making on blockchain. All votes are public and anyone can check the results.</b>
+                    <div style={{ marginTop: 18, marginBottom: 0, fontWeight: 700, color: '#6b7280', fontSize: '1.04em' }}>Function:</div>
+                    <ul style={{ marginTop: 16, marginBottom: 0, paddingLeft: 18 }}>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>voteA()</span>&nbsp;&ndash;&nbsp;casts a vote for option a. each user can vote only once.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>voteB()</span>&nbsp;&ndash;&nbsp;casts a vote for option b. each user can vote only once.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>getVotesA()</span>&nbsp;&ndash;&nbsp;returns the total number of votes for option a.<div style={{ height: '32px' }}></div></li>
+                      <li style={{ color: '#6b7280', fontSize: '1.04em', fontWeight: 500 }}><span style={{ background: '#c7cbe0', color: '#23272e', borderRadius: '8px', fontFamily: 'Fira Mono, Menlo, Monaco, Consolas, monospace', fontSize: '1.04em', padding: '3px 14px', marginRight: 8, display: 'inline-block' }}>getVotesB()</span>&nbsp;&ndash;&nbsp;returns the total number of votes for option b.<div style={{ height: '32px' }}></div></li>
+                    </ul>
                   </div>
                   <div style={{ marginTop: '8px', borderRadius: '10px', background: '#e2e3e6', boxShadow: '0 2px 12px rgba(0,0,0,0.04)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#d3d4d7', padding: '8px 18px 8px 18px', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', borderBottom: '1px solid #bcbec2' }}>
