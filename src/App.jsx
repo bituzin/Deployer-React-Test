@@ -73,14 +73,14 @@ function App() {
             left: 0,
             width: '100vw',
             height: '100vh',
-            background: 'rgba(0,0,0,0.18)',
+            background: 'rgba(0,0,0,0.48)',
             zIndex: 2000,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
             <div style={{
-              background: '#fff',
+              background: '#f5f7fa',
               borderRadius: 14,
               boxShadow: '0 2px 16px rgba(0,82,255,0.12)',
               padding: '32px 38px',
@@ -172,7 +172,7 @@ function App() {
                 position: 'absolute',
                 top: '100%',
                 left: 0,
-                background: '#e3e6ee',
+                background: '#f5f7fa',
                 minWidth: '180px',
                 boxShadow: '0 4px 16px rgba(0,82,255,0.10)',
                 borderRadius: '8px',
@@ -204,7 +204,7 @@ function App() {
                     style={{
                       maxWidth: 540,
                       margin: '60px auto 32px auto',
-                      background: 'rgba(255,255,255,0.95)',
+                      background: '#f5f7fa',
                       borderRadius: 12,
                       boxShadow: '0 2px 16px rgba(0,82,255,0.08)',
                       padding: '28px 32px',
@@ -314,7 +314,52 @@ function App() {
               } />
               <Route path="/contract/simple-storage" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
-                          <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleStorage</h2>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                            <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>SimpleStorage</h2>
+                            <button
+                              className="ibb-btn"
+                              style={{
+                                minWidth: '70px',
+                                fontSize: '0.92em',
+                                padding: '0.32em 0.8em',
+                                marginLeft: '12px',
+                                background: '#2563eb',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontWeight: 500,
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 8px rgba(0,82,255,0.10)',
+                                transition: 'background 0.2s'
+                              }}
+                              onMouseOver={e => e.currentTarget.style.background='#1746b1'}
+                              onMouseOut={e => e.currentTarget.style.background='#2563eb'}
+                              onClick={async () => {
+                                if (!window.ethereum) {
+                                  setPopup({ visible: true, message: "MetaMask or other wallet required", txHash: null });
+                                  return;
+                                }
+                                try {
+                                  const provider = new ethers.BrowserProvider(window.ethereum);
+                                  const signer = await provider.getSigner();
+                                  const bytecode = "0x6080604052348015600e575f5ffd5b5060ba80601a5f395ff3fe6080604052348015600e575f5ffd5b5060043610603a575f3560e01c806309ce9ccb14603e5780633fb5c1cb146057578063f2c9ecd8146068575b5f5ffd5b60455f5481565b60405190815260200160405180910390f35b60666062366004606e565b5f55565b005b5f546045565b5f60208284031215607d575f5ffd5b503591905056fea26469706673582212200cf668aaa1a8919f982a5eb6458914b17b8d63ca0f5c3aac933d33cc0699e59264736f6c634300081e0033";
+                                  const tx = await signer.sendTransaction({ data: bytecode });
+                                  const receipt = await tx.wait();
+                                  if (receipt.contractAddress) {
+                                    setPopup({ visible: true, message: `Contract SimpleStorage deployed successfully!`, txHash: tx.hash });
+                                  } else {
+                                    setPopup({ visible: true, message: "Could not get deployed contract address.", txHash: null });
+                                  }
+                                } catch (err) {
+                                  if (err && err.message && (err.message.includes('user rejected') || err.message.includes('denied'))) {
+                                    setPopup({ visible: true, message: "Transaction aborted by user", txHash: null });
+                                  } else {
+                                    setPopup({ visible: true, message: "Deploy error: " + err.message, txHash: null });
+                                  }
+                                }
+                              }}
+                            >Deploy</button>
+                          </div>
                           <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                             Bardzo prosty smart kontrakt, który pozwala na przechowywanie jednej liczby całkowitej. Każdy może ustawić nową wartość oraz ją odczytać. Idealny do nauki i testów działania blockchaina.
                           </div>
@@ -367,7 +412,48 @@ function App() {
               } />
               <Route path="/contract/click-counter" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
-                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>ClickCounter</h2>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>ClickCounter</h2>
+                    <button
+                      className="ibb-btn"
+                      style={{
+                        minWidth: '70px',
+                        fontSize: '0.92em',
+                        padding: '0.32em 0.8em',
+                        marginLeft: '12px',
+                        background: '#2563eb',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(0,82,255,0.10)',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background='#1746b1'}
+                      onMouseOut={e => e.currentTarget.style.background='#2563eb'}
+                      onClick={async () => {
+                        if (!window.ethereum) {
+                          setPopup({ visible: true, message: "MetaMask or other wallet required", txHash: null });
+                          return;
+                        }
+                        try {
+                          const provider = new ethers.BrowserProvider(window.ethereum);
+                          const signer = await provider.getSigner();
+                          const bytecode = "0x6080604052348015600e575f5ffd5b5060c580601a5f395ff3fe6080604052348015600e575f5ffd5b50600436106030575f3560e01c806306661abd1460345780637d55923d14604d575b5f5ffd5b603b5f5481565b60405190815260200160405180910390f35b60536055565b005b60015f5f82825460649190606b565b9091555050565b80820180821115608957634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212205c59a7297bf9296c81d569fd83247fe0bf9f7d0951f5a677a17656223aaee51864736f6c634300081e0033";
+                          const tx = await signer.sendTransaction({ data: bytecode });
+                          const receipt = await tx.wait();
+                          if (receipt.contractAddress) {
+                            setPopup({ visible: true, message: `Contract ClickCounter deployed successfully!`, txHash: tx.hash });
+                          } else {
+                            setPopup({ visible: true, message: "Could not get deployed contract address.", txHash: null });
+                          }
+                        } catch (err) {
+                          setPopup({ visible: true, message: err.message || "Deployment failed", txHash: null });
+                        }
+                      }}
+                    >Deploy</button>
+                  </div>
                   <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                     Bardzo prosty smart kontrakt, który zlicza liczbę kliknięć. Każdy może wywołać funkcję <code>click()</code>, aby zwiększyć licznik o jeden. Aktualną wartość licznika można odczytać przez <code>getCount()</code>. Kontrakt nie posiada uprawnień – każdy może kliknąć i odczytać licznik.
                   </div>
@@ -420,7 +506,48 @@ contract ClickCounter {
               } />
               <Route path="/contract/message-board" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
-                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>MessageBoard</h2>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>MessageBoard</h2>
+                    <button
+                      className="ibb-btn"
+                      style={{
+                        minWidth: '70px',
+                        fontSize: '0.92em',
+                        padding: '0.32em 0.8em',
+                        marginLeft: '12px',
+                        background: '#2563eb',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(0,82,255,0.10)',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background='#1746b1'}
+                      onMouseOut={e => e.currentTarget.style.background='#2563eb'}
+                      onClick={async () => {
+                        if (!window.ethereum) {
+                          setPopup({ visible: true, message: "MetaMask or other wallet required", txHash: null });
+                          return;
+                        }
+                        try {
+                          const provider = new ethers.BrowserProvider(window.ethereum);
+                          const signer = await provider.getSigner();
+                          const bytecode = "0x6080604052348015600e575f5ffd5b506103ba8061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061003f575f3560e01c8063256fec881461004357806332970710146100735780636630f88f14610088575b5f5ffd5b600154610056906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61007b61009d565b60405161006a9190610149565b61009b610096366004610192565b610128565b005b5f80546100a990610245565b80601f01602080910402602001604051908101604052809291908181526020018280546100d590610245565b80156101205780601f106100f757610100808354040283529160200191610120565b820191905f5260205f20905b81548152906001019060200180831161010357829003601f168201915b505050505081565b5f61013382826102c9565b5050600180546001600160a01b03191633179055565b602081525f82518060208401528060208501604085015e5f604082850101526040601f19601f83011684010191505092915050565b600181811c9082168061025957607f821691505b60208210810361027757634e487b7160e01b5f52602260045260245ffd5b50919050565b601f8211156102c457805f5260205f20601f840160051c810160208510156102a25750805b601f840160051c820191505b818110156102c1575f81556001016102ae565b50505b505050565b815167ffffffffffffffff8111156102e3576102e361017e565b6102f7816102f18454610245565b8461027d565b6020601f821160018114610329575f83156103125750848201515b5f19600385901b1c1916600184901b1784556102c1565b5f84815260208120601f198516915b828110156103585787850151825560209485019460019092019101610338565b508482101561037557868401515f19600387901b60f8161c191681555b50505050600190811b0190555056fea264697066735822122081aa54c8ed61172532a488e962737c95dfb429d257ad3221825fb2c89316835664736f6c634300081e0033";
+                          const tx = await signer.sendTransaction({ data: bytecode });
+                          const receipt = await tx.wait();
+                          if (receipt.contractAddress) {
+                            setPopup({ visible: true, message: `Contract MessageBoard deployed successfully!`, txHash: tx.hash });
+                          } else {
+                            setPopup({ visible: true, message: "Could not get deployed contract address.", txHash: null });
+                          }
+                        } catch (err) {
+                          setPopup({ visible: true, message: err.message || "Deployment failed", txHash: null });
+                        }
+                      }}
+                    >Deploy</button>
+                  </div>
                   <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                     MessageBoard to prosty smart kontrakt, który działa jak publiczna tablica wiadomości. Każdy użytkownik może zapisać nową wiadomość wraz ze swoim adresem, a każdy może odczytać ostatnią zapisaną wiadomość i jej nadawcę.
                   </div>
@@ -475,7 +602,48 @@ contract MessageBoard {
               } />
               <Route path="/contract/simple-voting" element={
                 <div style={{ maxWidth: 540, margin: '60px auto 32px auto', background: '#e9eaec', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.04)', padding: '28px 32px', textAlign: 'left', fontFamily: 'Inter, Arial, sans-serif', fontWeight: 500, fontSize: '1.08em', color: '#2563eb' }}>
-                  <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', marginBottom: '18px' }}>SimpleVoting</h2>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <h2 style={{ color: '#2563eb', fontWeight: 700, fontSize: '1.3em', margin: 0 }}>SimpleVoting</h2>
+                    <button
+                      className="ibb-btn"
+                      style={{
+                        minWidth: '70px',
+                        fontSize: '0.92em',
+                        padding: '0.32em 0.8em',
+                        marginLeft: '12px',
+                        background: '#2563eb',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(0,82,255,0.10)',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background='#1746b1'}
+                      onMouseOut={e => e.currentTarget.style.background='#2563eb'}
+                      onClick={async () => {
+                        if (!window.ethereum) {
+                          setPopup({ visible: true, message: "MetaMask or other wallet required", txHash: null });
+                          return;
+                        }
+                        try {
+                          const provider = new ethers.BrowserProvider(window.ethereum);
+                          const signer = await provider.getSigner();
+                          const bytecode = "0x6080604052348015600e575f5ffd5b5060f38061001b5f395ff3fe6080604052348015600e575f5ffd5b50600436106044575f3560e01c80633c8d0bec14604857806355416e06146061578063847d52d6146069578063fb32aedb146071575b5f5ffd5b604f5f5481565b60405190815260200160405180910390f35b60676077565b005b604f60015481565b6067608d565b60015f5f828254608691906099565b9091555050565b6001805f828254608691905b8082018082111560b757634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212201a53748d74d7a82011e00c648f970427f5f2a16a963e42bc8d7208522d889f1b64736f6c634300081e0033";
+                          const tx = await signer.sendTransaction({ data: bytecode });
+                          const receipt = await tx.wait();
+                          if (receipt.contractAddress) {
+                            setPopup({ visible: true, message: `Contract SimpleVoting deployed successfully!`, txHash: tx.hash });
+                          } else {
+                            setPopup({ visible: true, message: "Could not get deployed contract address.", txHash: null });
+                          }
+                        } catch (err) {
+                          setPopup({ visible: true, message: err.message || "Deployment failed", txHash: null });
+                        }
+                      }}
+                    >Deploy</button>
+                  </div>
                   <div style={{ color: '#2563eb', fontWeight: 400, fontSize: '1.08em', marginBottom: '18px' }}>
                     SimpleVoting to prosty kontrakt do głosowania. Każdy użytkownik może oddać głos na jedną z dwóch opcji (A lub B). Kontrakt zlicza głosy i pozwala odczytać aktualny wynik. Każdy może zagłosować tylko raz. Idealny do nauki mechanizmów głosowania na blockchainie.
                   </div>
